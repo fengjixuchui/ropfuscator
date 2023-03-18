@@ -1,3 +1,9 @@
+# Disclaimer
+ 
+ROPfuscator is a research proof of concept and is not intended for production use. The authors do not take any responsibility or liability for the use of the software. Please exercise caution and use at your own risk.
+
+---
+
 # ROPfuscator [![Build](https://github.com/ropfuscator/ropfuscator/actions/workflows/main.yaml/badge.svg)](https://github.com/ropfuscator/ropfuscator/actions/workflows/main.yaml)
 ![logo](./docs/logo.png)
 
@@ -103,3 +109,9 @@ We combine the following obfuscation layers to achieve robust obfuscation agains
 
 - Linux 32-bit x86 binaries are the only supported target (as of now)
 - For detailed limitations, see [limitation.md](./docs/limitation.md).
+
+## Interested in working on ROPfuscator?
+
+We encourage collaboration and are open to discussing potential extensions or improvements to the project. If you are interested in contributing, please reach out to us or open an issue.
+
+Thank you for your support!
