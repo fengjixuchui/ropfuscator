@@ -7,7 +7,7 @@ ROPfuscator is a research proof of concept and is not intended for production us
 # ROPfuscator [![Build](https://github.com/ropfuscator/ropfuscator/actions/workflows/main.yaml/badge.svg)](https://github.com/ropfuscator/ropfuscator/actions/workflows/main.yaml)
 ![logo](./docs/logo.png)
 
-ROPfuscator is a fine-grained code obfuscation framework for C/C++ programs using ROP (return-oriented programming).
+ROPfuscator is a fine-grained code obfuscation framework for LLVM-supported languages using ROP (return-oriented programming).
 ROPfuscator obfuscates a program at the assembly code level by transforming regular instructions into ROP chains, thwarting our natural conception of normal control flow.
 It is implemented as an extension to LLVM (10.0.1) x86 backend.
 
@@ -46,7 +46,7 @@ ROPfuscator can target a single project, obfuscating only the object files perti
 
 ## Evaluation and White Paper
 
-Please note that the evaluation code present in this repository has not been used to produce any artifact. The original evaluation from the deprecated repository is still valid and it is used in the original white paper, published at the WOOT workshop.
+Please note that the evaluation code present in this repository has not been used to produce any artifact. The original evaluation from the deprecated repository is still valid and it is used in the original white paper.
 
 ---
 
@@ -104,6 +104,56 @@ We combine the following obfuscation layers to achieve robust obfuscation agains
   - Convert each instruction into one or more ROP gadgets, and translate the entire code to ROP chains.
 - Opaque Predicate Insertion
   - Translate ROP gadget address(es) and stack pushed values into opaque constants, which are composition of multiple opaque predicates.
+
+## Quick Start
+
+ROPfuscator can be used to obfuscate packages that are present in the Nixpkgs repository. Currently, we are using a custom fork because some upstream packages were not properly configured for cross-compilation. Although we have already submitted some of the patches upstream, there is still some work to be done for a seamless experience.
+
+To get started, follow the first two steps listed above and install Nix. Then, copy `flake-example.nix` into a directory, renaming it to `flake.nix`:
+
+```bash
+ mkdir -p ropfuscator-example && cd ropfuscator-example
+ cp ../flake-example.nix flake.nix
+```
+
+At this point, you can build the two packages defined in the flake: `hello` and `obfuscatedHello`.
+
+To build `obfuscatedHello`, use:
+
+```bash
+ nix build .#obfuscatedHello -L
+```
+
+Similarly, to build `hello` run:
+
+```
+ nix build .#hello -L
+```
+
+## Quick Start
+
+You can use ROPfuscator to obfuscate packages present in the Nixpkgs repository. We currently are locked into a custom fork as some packages upstream were not well configured for cross-compilation. We pushed some of the patches upstream but there is more work to have a seemless experience.
+
+Follow step 0 and step 1 from above and install Nix. Then, copy the `flake-example.nix` into a directory. At this point we can build the two packages defined in the flake: `hello` and `obfuscatedHello`.
+
+To build obfuscatedHello we have to invoke
+
+ nix build .#obfuscatedHello -L
+
+Similarly, for hello:
+
+ nix build .#hello -L
+ 
+## Configurations
+
+ROPfuscator can be configured through TOML configuration files. [This repository](https://github.com/ropfuscator/utilities/tree/master/configs) includes the following pre-made configurations:
+
+ - **ROP Only**: does not obfuscate gadget addresses, stack values, immediate operands, or branch targets, and does not use opaque predicates.
+ - **All Addresses**: obfuscates all gadget addresses and uses opaque predicates for all opaque constants.
+ - **Half addresses**: obfuscates 50% of gadget addresses and uses opaque predicates for all opaque constants.
+ - **Full**: obfuscates all gadget addresses, stack values, immediate operands, and branch targets, and uses opaque predicates for all opaque constants.
+
+Each configuration can be further customized with the options available in the configuration table in the [README](https://github.com/ropfuscator/utilities/tree/master/configs).
 
 ## Limitations
 
